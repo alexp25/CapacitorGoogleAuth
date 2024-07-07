@@ -25,6 +25,8 @@ public class GoogleAuth: CAPPlugin {
             return;
         }
 
+        NSLog("GoogleSignIn: Using client ID: \(clientId)")
+
         googleSignInConfiguration = GIDConfiguration.init(clientID: clientId, serverClientID: serverClientId)
         
         // these are scopes granted by default by the signIn method
@@ -119,16 +121,20 @@ public class GoogleAuth: CAPPlugin {
     
     func getClientIdValue() -> String? {
         if let clientId = getConfigValue("iosClientId") as? String {
+            NSLog("GoogleSignIn: Using iosClientId from config: \(clientId)")
             return clientId;
         }
         else if let clientId = getConfigValue("clientId") as? String {
+            NSLog("GoogleSignIn: Using clientId from config: \(clientId)")
             return clientId;
         }
         else if let path = Bundle.main.path(forResource: "GoogleService-Info", ofType: "plist"),
                 let dict = NSDictionary(contentsOfFile: path) as? [String: AnyObject],
                 let clientId = dict["CLIENT_ID"] as? String {
+            NSLog("GoogleSignIn: Using clientId from GoogleService-Info.plist: \(clientId)")
             return clientId;
         }
+        NSLog("GoogleSignIn: No client ID found")
         return nil;
     }
     
